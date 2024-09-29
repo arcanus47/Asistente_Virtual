@@ -1,54 +1,39 @@
-tool:
-  briefcase:
-    project_name: "TaskControl"  # Cambia esto por el nombre de tu proyecto
-    bundle: "com.chsolutions.taskcontrol"
-    version: "0.0.1"
-    author: "CH-Solutions"
-    description: "Gestor de Tareas"
-    license:
-      file: "LICENSE"  # Referencia al archivo LICENSE que contiene el texto de la licencia
-    app:
-      TaskControl:  # Reemplaza "TaskControl" con el nombre de tu proyecto
-        sources:
-          - "main.py"  # Cambiado para apuntar directamente al archivo main.py
-        assets:
-          - "assets/icon.png"
-          - "assets/notificacion.mp3"  # Incluir los archivos de assets
-        android:
-          permissions:
-            - "INTERNET"
-            - "POST_NOTIFICATIONS"
-          min_sdk_version: 21  # Versión mínima de SDK de Android (5.0)
-          target_sdk_version: 33  # Versión objetivo (13)
-          icon: "assets/icon.png"  # Icono para Android
-          build:
-            release: true
-        ios:
-          minimum_version: "13.0"  # Versión mínima para iOS
-          permissions:
-            - "INTERNET"
-            - "NOTIFICATIONS"
-          icon: "assets/icon.png"  # Icono para iOS
-          build:
-            release: true
-        macOS:
-          supports:
-            - "arm64"  # Soporte para Apple Silicon (M1/M2)
-            - "x86_64"  # Soporte para Intel
-          minimum_version: "10.15"  # Versión mínima de macOS (Catalina)
-          icon: "assets/icon.png"  # Icono para macOS
-          build:
-            release: true
-        windows:
-          minimum_version: "10"  # Versión mínima de Windows 10
-          supports:
-            - "x86_64"  # Soporte para arquitecturas de 64 bits
-          icon: "assets/icon.png"  # Icono para Windows
-          build:
-            release: true
-        linux:
-          package_manager: "apt-get"  # Para distribuciones basadas en Debian
-          minimum_version: "18.04"  # Versión mínima de Ubuntu/Linux
-          icon: "assets/icon.png"  # Icono para Linux
-          build:
-            release: true
+name: Build APK for TaskControl
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python environment
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install briefcase flet
+
+      - name: Build the APK
+        run: |
+          briefcase create android
+          briefcase build android
+          briefcase package android
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v2
+        with:
+          name: TaskControl-APK
+          path: dist/TaskControl.apk
