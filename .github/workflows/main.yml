@@ -87,6 +87,14 @@ jobs:
       with:
         flutter-version: ${{ env.FLUTTER_VERSION }}
 
+    - name: Install Dependencies for pygame
+      run: |
+        brew install sdl2 sdl2_image sdl2_mixer sdl2_ttf
+
+    - name: Install pygame from precompiled wheels
+      run: |
+        pip install pygame --only-binary :all:
+
     - name: Flet Build macOS
       run: |
         flutter config --no-analytics
