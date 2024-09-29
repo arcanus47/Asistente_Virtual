@@ -1,1 +1,81 @@
+  build-aab:
+    runs-on: ubuntu-latest
 
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Python ${{ env.PYTHON_VERSION }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+
+    - name: Install Python Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Setup Flutter ${{ env.FLUTTER_VERSION }}
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: ${{ env.FLUTTER_VERSION }}
+
+    - name: Setup Java JDK
+      uses: actions/setup-java@v4.2.1
+      with:
+        distribution: 'temurin'
+        java-version: '21'
+
+    - name: Flet Build AAB
+      run: |
+        flutter config --no-analytics
+        flet build aab --verbose --build-number=$BUILD_NUMBER --build-version=$BUILD_VERSION
+
+    - name: Upload AAB Artifact
+      uses: actions/upload-artifact@v4.3.4
+      with:
+        name: aab-build-artifact
+        path: build/app/outputs/bundle/release/app-release.aab
+        if-no-files-found: warn
+        overwrite: false
+
+  build-apk:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Python ${{ env.PYTHON_VERSION }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+
+    - name: Install Python Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Setup Flutter ${{ env.FLUTTER_VERSION }}
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: ${{ env.FLUTTER_VERSION }}
+
+    - name: Setup Java JDK
+      uses: actions/setup-java@v4.2.1
+      with:
+        distribution: 'temurin'
+        java-version: '21'
+
+    - name: Flet Build APK
+      run: |
+        flutter config --no-analytics
+        flet build apk --verbose --build-number=$BUILD_NUMBER --build-version=$BUILD_VERSION
+
+    - name: Upload APK Artifact
+      uses: actions/upload-artifact@v4.3.4
+      with:
+        name: apk-build-artifact
+        path: build/app/outputs/flutter-apk/app-release.apk
+        if-no-files-found: warn
+        overwrite: false
