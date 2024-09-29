@@ -55,5 +55,4 @@ jobs:
         name: aab-build-artifact
         path: build/aab
         if-no-files-found: error
-        overwrite: false # If true, an artifact with a matching name will be deleted before a new one is uploaded. If false, the action will fail if an artifact for the given name already exists. Does not fail if the artifact does not exist.
-
+        overwrite: false
