@@ -1,0 +1,16 @@
+[tool.briefcase]
+project_name = "TaskControl"  # Cambia esto por el nombre de tu proyecto
+bundle = "com.chsolutions.taskcontrol"
+version = "0.0.1"
+author = "CH-Solutions"
+description = "Gestor de Tareas"
+
+license.file = "LICENSE"  # Referencia al archivo LICENSE que contiene el texto de la licencia
+
+[tool.briefcase.app.TaskControl]  # Reemplaza "TaskControl" con el nombre de tu proyecto
+sources = ['main.py']  # Cambiado para apuntar directamente al archivo main.py
+assets = [
+    "assets/icon.png", 
+    "assets/notificacion.mp3"
+]  # Incluir los archivos de assets
+android.permissions = ["INTERNET", "POST_NOTIFICATIONS"]
