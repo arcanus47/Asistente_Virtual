@@ -1,4 +1,4 @@
-name: Build APK for TaskControl
+name: Build APK
 
 on:
   push:
@@ -9,31 +9,31 @@ on:
       - main
 
 jobs:
-  build:
+  build-apk:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out the repository
-        uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-      - name: Set up Python environment
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.x
+    - name: Set up Python environment
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
 
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install briefcase flet
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install flet briefcase
 
-      - name: Build the APK
-        run: |
-          briefcase create android
-          briefcase build android
-          briefcase package android
+    - name: Create APK
+      run: |
+        briefcase create android
+        briefcase build android
+        briefcase package android
 
-      - name: Upload APK
-        uses: actions/upload-artifact@v2
-        with:
-          name: TaskControl-APK
-          path: dist/TaskControl.apk
+    - name: Upload APK
+      uses: actions/upload-artifact@v2
+      with:
+        name: TaskControl-APK
+        path: dist/android/*
