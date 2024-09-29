@@ -29,17 +29,24 @@ jobs:
             libsdl2-dev \
             libsdl2-image-dev \
             libsdl2-mixer-dev \
-            libsdl2-ttf-dev
-
-          # Clonar y construir PortMidi (si es necesario)
-          git clone https://github.com/PortMidi/portmidi.git
-          cd portmidi
-          ./configure
-          make
-          sudo make install
-          cd ..
-          rm -rf portmidi
+            libsdl2-ttf-dev \
+            portmidi \
+            libportmidi-dev \
+            libporttime-dev
 
       - name: Install Python dependencies
         run: |
           pip install -r requirements.txt
+
+      # Si necesitas compilar PortMidi desde el código fuente, descomenta la siguiente sección
+      # - name: Install PortMidi from source (if needed)
+      #   run: |
+      #     git clone https://github.com/PortMidi/portmidi.git
+      #     cd portmidi/portmidi
+      #     mkdir build
+      #     cd build
+      #     cmake ..
+      #     make
+      #     sudo make install
+      #     cd ../..
+      #     rm -rf portmidi
